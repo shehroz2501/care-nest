@@ -38,5 +38,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }
 }
-
-export const methods = ["POST"];

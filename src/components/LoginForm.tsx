@@ -31,7 +31,8 @@ export default function LoginForm() {
         const data = await response.json();
         const role = data.user.role;
         console.log("User logged in:", data.user.role); // Optionally handle the user data
-        router.push(`/dashboard?role=${role}`);
+        // router.push(`/dashboard?role=${role}`);
+        router.push("/dashboard");
       } else {
         // Handle errors
         const error = await response.json();
