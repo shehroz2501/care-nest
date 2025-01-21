@@ -9,12 +9,13 @@ import { Input } from "@/components/ui/input";
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      // Call the API route for login
       const response = await fetch("/api/login", {
         method: "POST",
         headers: {
@@ -26,20 +27,19 @@ export default function LoginForm() {
         }),
       });
 
-      // If login is successful, redirect to the dashboard
       if (response.ok) {
         const data = await response.json();
         const role = data.user.role;
-        console.log("User logged in:", data.user.role); // Optionally handle the user data
-        // router.push(`/dashboard?role=${role}`);
-        router.push("/dashboard");
+        console.log("User logged in:", role);
+        router.push(`/dashboard/${role}`);
       } else {
-        // Handle errors
         const error = await response.json();
         console.error("Login failed:", error.error);
       }
     } catch (error) {
       console.error("Error occurred during login:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,7 +59,9 @@ export default function LoginForm() {
         placeholder="Password"
         required
       />
-      <Button type="submit">Login</Button>
+      <Button type="submit" disabled={isLoading}>
+        {isLoading ? "Logging in..." : "Log in"}
+      </Button>
     </form>
   );
 }
